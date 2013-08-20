@@ -12,7 +12,7 @@ BindingSiteRecord = namedtuple("BindingSiteRecord",["genome", "tf", "operon",
 
 class BindingSite(str):
     # Basically subclass string for TFBS attributes
-    def __new__(cls,genome,tf,operon,strand,sequence,startpos,endpos,rflank,lflank):
+    def __new__(cls,genome,tf,operon,strand,sequence,startpos,endpos,rflank,lflank,regulation):
         # YANETUT:
         # http://stackoverflow.com/questions/820742/how-to-bestow-string-ness-on-my-class
         newobj = str.__new__(cls,sequence)
@@ -24,6 +24,7 @@ class BindingSite(str):
         newobj.endpos = endpos
         newobj.lflank = lflank
         newobj.rflank = rflank
+        newobj.regulation = regulation
         return newobj
 
 class Organism(object):
@@ -41,13 +42,17 @@ for csv_name in csv_names:
     records = map(BindingSiteRecord._make, csv.reader(open(file_name,'rb')))[1:]
     binding_sites = [BindingSite(record.genome,record.tf,record.operon,
                                  record.strand,record.sequence,record.startpos,
-                                 record.endpos,record.rflank,record.lflank)
+                                 record.endpos,record.rflank,record.lflank,
+                                 record.regulation)
                      for record in records]
     tf_names = set(bs.tf for bs in binding_sites)
     exec("%s = Organism()" % org_name)
     for tf_name in tf_names:
         tf_binding_sites = [bs for bs in binding_sites if bs.tf == tf_name]
         setattr(eval(org_name),tf_name,tf_binding_sites)
+
+    setattr(eval(org_name),"tfs",list(tf_names))
+        
         #exec_string = ("%s.%s = %s" %
         #(org_name,tf_name,tf_binding_sites))
         # exec(exec_string)
@@ -57,3 +62,4 @@ for csv_name in csv_names:
         #another option.
         
         
+print "loaded motifs"

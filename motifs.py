@@ -30,12 +30,12 @@ class BindingSite(str):
 class Organism(object):
     pass
 
-csv_names = [f for f in os.listdir('/home/poneill/binding_sites') #make robust later
+csv_names = [f for f in os.listdir('/home/poneill/motifs') #make robust later
         if f.endswith(".csv") and not f == "dump.csv"]
 
 for csv_name in csv_names:
     org_name = "_".join(csv_name.split(" ")[:2])
-    file_name = os.path.join("/home/poneill/binding_sites",csv_name)
+    file_name = os.path.join("/home/poneill/motifs",csv_name)
     if org_name.endswith("."):
         org_name = org_name[:-1]
     #omit header

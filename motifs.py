@@ -1,7 +1,10 @@
 """Turn Prodoric into a usable Python module."""
 #Code could stand some cleaning, but is usable.
 
-import os,csv
+import os,csv,sys
+sys.path.append("lib/utils")
+print sys.path
+print os.getcwd()
 from utils import *
 from collections import namedtuple
 BindingSiteRecord = namedtuple("BindingSiteRecord",["genome", "tf", "operon",
